@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { FiEye } from "react-icons/fi"; // import eye icon
+import { FiEye, FiX } from "react-icons/fi";
 
 const DocumentTable = () => {
   const [documents, setDocuments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // Modal State
+  const [showModal, setShowModal] = useState(false);
+  const [selectedFile, setSelectedFile] = useState("");
 
   useEffect(() => {
     const fetchDocuments = async () => {
@@ -32,9 +36,6 @@ const DocumentTable = () => {
     fetchDocuments();
   }, []);
 
-  const getStatusStyle = () =>
-    "bg-green-100 text-green-700"; // You can customize status & colors later
-
   const formatDate = (dateString) => {
     if (!dateString) return "-";
     const date = new Date(dateString);
@@ -43,6 +44,14 @@ const DocumentTable = () => {
       month: "short",
       year: "numeric",
     });
+  };
+
+  const isImage = (url) => {
+    return url.match(/\.(jpeg|jpg|png|gif|webp)$/i);
+  };
+
+  const isPDF = (url) => {
+    return url.match(/\.pdf$/i);
   };
 
   return (
@@ -63,11 +72,12 @@ const DocumentTable = () => {
                 <tr>
                   <th className="py-2 px-4 border">#</th>
                   <th className="py-2 px-4 border">Document Name</th>
-                  <th className="py-2 px-4 border">File</th>
+                  <th className="py-2 px-4 border">Preview</th>
                   <th className="py-2 px-4 border">Uploaded On</th>
                   <th className="py-2 px-4 border">Status</th>
                 </tr>
               </thead>
+
               <tbody>
                 {documents.length === 0 && (
                   <tr>
@@ -76,24 +86,30 @@ const DocumentTable = () => {
                     </td>
                   </tr>
                 )}
+
                 {documents.map((doc, index) => (
                   <tr key={doc._id || index} className="text-center">
                     <td className="py-2 px-4 border">{index + 1}</td>
+
                     <td className="py-2 px-4 border font-medium">
-                      {doc.type
-                        .replace(/([A-Z])/g, " $1") // split camelCase by spaces
-                        .replace(/^./, (str) => str.toUpperCase())}
+                      {doc.type.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase())}
                     </td>
-                    <td className="py-2 px-4 border text-blue-600 underline cursor-pointer">
-                      <a href={doc.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center">
-                        <FiEye size={18} />
-                      </a>
+
+                    {/* View Button (Opens Modal) */}
+                    <td
+                      className="py-2 px-4 border text-blue-600 cursor-pointer hover:underline"
+                      onClick={() => {
+                        setSelectedFile(doc.url);
+                        setShowModal(true);
+                      }}
+                    >
+                      <FiEye size={18} className="mx-auto" />
                     </td>
+
                     <td className="py-2 px-4 border">{formatDate(doc.uploadedAt)}</td>
+
                     <td className="py-2 px-4 border">
-                      <span
-                        className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusStyle()}`}
-                      >
+                      <span className="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-medium">
                         Uploaded
                       </span>
                     </td>
@@ -104,6 +120,57 @@ const DocumentTable = () => {
           </div>
         )}
       </div>
+
+      {/* -------------------- MODAL -------------------- */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white p-4 rounded-xl shadow-xl max-w-3xl w-full relative">
+
+            {/* Close Button */}
+            <button
+              className="absolute top-3 right-3 text-gray-600 hover:text-red-600"
+              onClick={() => setShowModal(false)}
+            >
+              <FiX size={24} />
+            </button>
+
+            <h3 className="text-xl font-semibold mb-4 text-center">Document Preview</h3>
+
+            {/* IMAGE PREVIEW */}
+            {isImage(selectedFile) && (
+              <img
+                src={selectedFile}
+                alt="Document"
+                className="w-full max-h-[70vh] object-contain rounded-lg"
+              />
+            )}
+
+            {/* PDF PREVIEW */}
+            {isPDF(selectedFile) && (
+              <iframe
+                src={selectedFile}
+                title="PDF Preview"
+                className="w-full h-[70vh] rounded-lg"
+              ></iframe>
+            )}
+
+            {/* OTHER FILE TYPES */}
+            {!isImage(selectedFile) && !isPDF(selectedFile) && (
+              <div className="text-center py-10">
+                <p className="text-gray-600">Cannot preview this file type.</p>
+                <a
+                  href={selectedFile}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 underline"
+                >
+                  Click to Download
+                </a>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
