@@ -91,6 +91,7 @@ import VendorCouponsTable from "./Pages/CouponPage.js";
 import VendorNotifications from "./Pages/VendorNotifications.js";
 import VendorRegistration from "./Pages/VendorRegistation.js";
 import MyProfile from "./Pages/MyProfile.js";
+import PrivacyPolicy from "./Pages/PrivacyAndPolicy.js";
 
 
 
@@ -101,6 +102,7 @@ function App() {
       {/* Login page rendered outside AdminLayout */}
       <Route path="/" element={<LoginPage />} />
       <Route path="/register" element={<VendorRegistration />} />
+      <Route path="/merchant-agreement" element={<PrivacyPolicy />} />
 
       {/* All other routes inside AdminLayout */}
       <Route
