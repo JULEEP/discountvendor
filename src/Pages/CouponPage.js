@@ -34,7 +34,7 @@ export default function VendorCouponsTable() {
       try {
         setLoading(true);
         const response = await fetch(
-          `http://31.97.206.144:6098/api/vendor/mycoupons/${vendorId}`
+          `https://api.redemly.com/api/vendor/mycoupons/${vendorId}`
         );
 
         if (!response.ok) {
@@ -128,7 +128,7 @@ export default function VendorCouponsTable() {
 
     try {
       const res = await fetch(
-        `http://31.97.206.144:6098/api/vendor/update-coupon-status/${selectedCoupon._id}`,
+        `https://api.redemly.com/api/vendor/update-coupon-status/${selectedCoupon._id}`,
         {
           method: "PATCH",
           headers: {

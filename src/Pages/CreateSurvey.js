@@ -44,7 +44,7 @@ const CreateSurvey = () => {
       setSuccessMessage(null);
 
       const response = await axios.post(
-        'http://31.97.206.144:6098/api/vendor/create-survey',
+        'https://api.redemly.com/api/vendor/create-survey',
         {
           vendorId,
           questions: formattedQuestions,

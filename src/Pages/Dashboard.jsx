@@ -31,7 +31,7 @@ const Dashboard = () => {
     setError(null);
 
     try {
-      const response = await fetch(`http://31.97.206.144:6098/api/vendor/dashboard/${vendorId}`);
+      const response = await fetch(`https://api.redemly.com/api/vendor/dashboard/${vendorId}`);
       if (!response.ok) {
         throw new Error(`Error fetching data: ${response.statusText}`);
       }

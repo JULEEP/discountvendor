@@ -34,7 +34,7 @@ const SubmittedSurveys = () => {
 
       try {
         const res = await axios.get(
-          `http://31.97.206.144:6098/api/vendor/get-surveys/${vendorId}`
+          `https://api.redemly.com/api/vendor/get-surveys/${vendorId}`
         );
 
         if (res.data.success && res.data.data.length > 0) {

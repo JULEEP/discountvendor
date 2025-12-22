@@ -22,7 +22,7 @@ const DocumentTable = () => {
 
       try {
         const res = await axios.get(
-          `http://31.97.206.144:6098/api/vendor/get-documents/${vendorId}`
+          `https://api.redemly.com/api/vendor/get-documents/${vendorId}`
         );
         setDocuments(res.data.documents || []);
       } catch (err) {

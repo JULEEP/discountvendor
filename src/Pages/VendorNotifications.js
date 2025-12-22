@@ -30,7 +30,7 @@ const VendorNotifications = () => {
         setError(null);
 
         // Updated to send vendorId as a URL param, not query param
-        const res = await fetch(`http://31.97.206.144:6098/api/vendor/notifications/${vendorId}`);
+        const res = await fetch(`https://api.redemly.com/api/vendor/notifications/${vendorId}`);
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
 
         const data = await res.json();
@@ -48,7 +48,7 @@ const VendorNotifications = () => {
   const handleDelete = async (id) => {
     try {
       // Delete API call
-      const res = await fetch(`http://31.97.206.144:6098/api/notifications/${id}`, {
+      const res = await fetch(`https://api.redemly.com/api/notifications/${id}`, {
         method: "DELETE",
       });
 
